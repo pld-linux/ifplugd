@@ -72,6 +72,6 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %dir %{_sysconfdir}/ifplugd
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ifplugd/ifplugd.conf
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ifplugd/ifplugd.action
+%attr(755,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ifplugd/ifplugd.action
 
 # end of file
