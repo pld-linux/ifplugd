@@ -1,0 +1,10 @@
+--- ifplugd-0.21/src/wireless.h.orig	2004-01-26 20:33:50.000000000 +0100
++++ ifplugd-0.21/src/wireless.h	2004-01-26 20:34:08.000000000 +0100
+@@ -26,6 +26,6 @@
+ #include <linux/if.h>
+ #include <net/if_arp.h>
+ 
+-#include "wireless.16.h"
++#include "wireless.15.h"
+ 
+ #endif
