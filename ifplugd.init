@@ -28,67 +28,62 @@ fi
 
 [ -n "$2" ] && INTERFACES="$2"
 
-[ "$INTERFACES" = "auto" ] && INTERFACES=$(awk -F: '/(eth|wlan)/ { print $1 }' /proc/net/dev | xargs)
-			
+[ -z "$INTERFACES" -o "$INTERFACES" = "auto" ] && INTERFACES=$(awk -F: '/(eth|wlan)/ { print $1 }' /proc/net/dev | xargs)
+
 RETVAL=0
 # See how we were called.
 case "$1" in
   start)
 	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/ifplugd ]; then
-	    for iface in $INTERFACES; do
-	    	msg_starting "Network Interface Plugging Daemon ($iface)"
-	    	args=$(eval echo \$\{ARGS_${IF}\})
+	for iface in $INTERFACES; do
+	    if [ ! -f /var/lock/subsys/ifplugd.${iface} ]; then
+		msg_starting "Network Interface Plugging Daemon ($iface)"
+		args=$(eval echo \$\{ARGS_${IF}\})
 		[ -z "$args" ] && args="${ARGS}"
 		daemon /sbin/ifplugd -i ${iface} ${args}
-		NEW_RETVAL=$?
-		[ "$RETVAL" -eq "0" ] && RETVAL=${NEW_RETVAL}
-	    done
-	    [ $RETVAL -eq 0 ] && touch /var/lock/subsys/ifplugd		
-	else
-	    msg_already_running ifplugd
-	fi
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ifplugd.${iface}
+    	    else
+    		msg_already_running "ifplugd ($iface)"
+    	    fi
+	done
 	;;
   stop)
-	if [ -f /var/lock/subsys/ifplugd ]; then
-	    for iface in $INTERFACES; do
+  	for iface in $INTERFACES; do
+	    if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
 		msg_stopping "Network Interface Plugging Daemon ($iface)"
 		daemon /sbin/ifplugd -k -i ${iface}
-		NEW_RETVAL=$?
-		[ "$RETVAL" -eq "0" ] && RETVAL=${NEW_RETVAL}
-	    done
-	    rm -f /var/run/ifplugd.pid /var/lock/subsys/ifplugd >/dev/null 2>&1
-	else
-	    msg_not_running ifplugd
-	fi	
+		RETVAL=$?
+	    else
+		msg_not_running "ifplugd ($iface)"
+	    fi
+	done
+	rm -f /var/run/ifplugd.pid /var/lock/subsys/ifplugd.* >/dev/null 2>&1
 	;;
   suspend)
-  	if [ -f /var/lock/subsys/ifplugd ]; then
-	    for iface in $INTERFACES; do
+  	for iface in $INTERFACES; do
+	    if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
 		msg_stopping "Network Interface Plugging Daemon (suspending $iface)"
 		daemon /sbin/ifplugd -S -i ${iface}
-		NEW_RETVAL=$?
-		[ "$RETVAL" -eq "0" ] && RETVAL=${NEW_RETVAL}
-	    done
-	else
-	    msg_not_running ifplugd
-	fi
+		RETVAL=$?
+    	    else
+    		msg_not_running "ifplugd ($iface)"
+    	    fi
+	done
 	;;
    resume)
-   	if [ -f /var/lock/subsys/ifplugd ]; then
-	    for iface in $INTERFACES; do
+   	for iface in $INTERFACES; do
+	    if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
 		msg_starting "Network Interface Plugging Daemon (resuming $iface)"
 		daemon /sbin/ifplugd -R -i ${iface}
-		NEW_RETVAL=$?
-		[ "$RETVAL" -eq "0" ] && RETVAL=${NEW_RETVAL}
-	    done
-	else
-	    msg_not_running ifplugd
-	fi
+		RETVAL=$?
+	    else
+    		msg_not_running "ifplugd ($iface)"
+    	    fi
+	done
 	;;	
-  restart|force-reload)
+  restart)
 	$0 stop
-	sleep 2
 	$0 start
 	exit $?
 	;;
@@ -99,8 +94,19 @@ case "$1" in
 	done
 	exit $?
 	;;
+  reload|force-reload)
+	if [ -f /var/lock/subsys/ifplugd ]; then
+	    	$0 stop
+		sleep 2
+		$0 start
+		RETVAL=$?
+	else
+		msg_not_running ifplugd >&2
+		exit 7
+	fi
+	;;
   *)
-	msg_usage "$0 {start|stop|restart|force-reload|status|resume|suspend}"
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
 	exit 3
 esac
 
