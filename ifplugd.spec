@@ -1,12 +1,12 @@
 Summary:	Detect and perform actions when an ethernet cable is (un)plugged
 Summary(pl):	Wykrywanie pod³±czenia/od³±czenia kabla ethernetowego i podejmowanie dzia³añ z tym zwi±zanych
 Name:		ifplugd
-Version:	0.22
+Version:	0.23
 Release:	1
 License:	GPL
 Group:		Networking
 Source0:	http://www.stud.uni-hamburg.de/~lennart/projects/ifplugd/%{name}-%{version}.tar.gz
-# Source0-md5:	7d534ef852b09541d5457c64e25278c9
+# Source0-md5:	a576c20b1834201bcadf18909ed8d699
 Source1:	%{name}.init
 URL:		http://www.stud.uni-hamburg.de/users/lennart/projects/ifplugd/
 BuildRequires:	libdaemon-devel >= 0.5
