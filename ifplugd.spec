@@ -3,15 +3,17 @@ Summary(pl):	Wykrywanie pod³±czenia/od³±czenia kabla ethernetowego i podejmowani
 Name:		ifplugd
 Version:	0.16
 Release:	1
+License:	GPL
+Group:		Networking
 Source0:	http://www.stud.uni-hamburg.de/~lennart/projects/ifplugd/ifplugd-0.16.tar.gz
 # Source0-md5:	56b920b51b05949f8a729e8c3e13ba70
 Source1:	%{name}.init
-License:	GPL
-Group:		Networking
 URL:		http://www.stud.uni-hamburg.de/users/lennart/projects/ifplugd/
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 BuildRequires:	libdaemon-devel >= 0.2
 BuildRequires:	lynx
+PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
 
@@ -73,5 +75,3 @@ fi
 %dir %{_sysconfdir}/ifplugd
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ifplugd/ifplugd.conf
 %attr(755,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ifplugd/ifplugd.action
-
-# end of file
