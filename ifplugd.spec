@@ -67,7 +67,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc doc/README doc/NEWS doc/README.html doc/style.css
-%{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/*
 %{_mandir}/man?/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %dir %{_sysconfdir}/ifplugd
