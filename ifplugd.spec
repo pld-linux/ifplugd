@@ -6,7 +6,7 @@ Release:	1
 License:	GPL
 Group:		Networking
 Source0:	http://0pointer.de/lennart/projects/ifplugd/%{name}-%{version}.tar.gz
-# Source0-md5:	f0ceac6690b02928015aa00c0d3e663b
+# Source0-md5:	0b52412b7faead48ad47b9b93daeaa7b
 Source1:	%{name}.init
 Patch0:		%{name}-nostdc99.patch
 URL:		http://www.stud.uni-hamburg.de/users/lennart/projects/ifplugd/
