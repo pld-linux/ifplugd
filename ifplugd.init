@@ -81,7 +81,7 @@ case "$1" in
     		msg_not_running "ifplugd ($iface)"
     	    fi
 	done
-	;;	
+	;;
   restart)
 	$0 stop
 	$0 start
