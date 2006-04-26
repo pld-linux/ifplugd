@@ -60,12 +60,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add %{name}
-	%service ifplugd restart
+%service ifplugd restart
 
 %preun
 if [ "$1" = "0" ]; then
 	%service ifplugd stop
-        /sbin/chkconfig --del %{name}
+	/sbin/chkconfig --del %{name}
 fi
 
 %files
