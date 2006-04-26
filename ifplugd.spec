@@ -8,7 +8,7 @@ Group:		Networking
 Source0:	http://0pointer.de/lennart/projects/ifplugd/%{name}-%{version}.tar.gz
 # Source0-md5:	df6f4bab52f46ffd6eb1f5912d4ccee3
 Source1:	%{name}.init
-URL:		http://www.stud.uni-hamburg.de/users/lennart/projects/ifplugd/
+URL:		http://0pointer.de/lennart/projects/ifplugd/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libdaemon-devel >= 0.5
