@@ -2,12 +2,14 @@ Summary:	Detect and perform actions when an ethernet cable is (un)plugged
 Summary(pl):	Wykrywanie pod³±czenia/od³±czenia kabla ethernetowego i podejmowanie dzia³añ z tym zwi±zanych
 Name:		ifplugd
 Version:	0.28
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking
 Source0:	http://0pointer.de/lennart/projects/ifplugd/%{name}-%{version}.tar.gz
 # Source0-md5:	df6f4bab52f46ffd6eb1f5912d4ccee3
+Patch0:	%{name}-pld.patch
 Source1:	%{name}.init
+Source2:	%{name}.sysconfig
 URL:		http://0pointer.de/lennart/projects/ifplugd/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -37,6 +39,7 @@ interfejsu tylko wtedy, gdy kabel jest rzeczywi¶cie pod³±czony.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 autoreconf
@@ -48,12 +51,12 @@ autoreconf
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -71,9 +74,9 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc doc/README doc/NEWS doc/README.html doc/style.css
-%attr(755,root,root) %{_sbindir}/*
-%{_mandir}/man?/*
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ifplugd
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/ifplugd
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ifplugd/ifplugd.conf
 %attr(755,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ifplugd/ifplugd.action
+%{_mandir}/man?/*
