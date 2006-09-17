@@ -26,14 +26,7 @@ else
 	exit 0
 fi
 
-[ -n "$2" ] && INTERFACES="$2"
-
-[ -z "$INTERFACES" -o "$INTERFACES" = "auto" ] && INTERFACES=$(awk -F: '/(eth|wlan)/ { print $1 }' /proc/net/dev | xargs)
-
-RETVAL=0
-# See how we were called.
-case "$1" in
-  start)
+start() {
 	# Check if the service is already running?
 	for iface in $INTERFACES; do
 		if [ ! -f /var/lock/subsys/ifplugd.${iface} ]; then
@@ -47,8 +40,9 @@ case "$1" in
 			msg_already_running "ifplugd ($iface)"
 		fi
 	done
-	;;
-  stop)
+}
+
+stop() {
   	for iface in $INTERFACES; do
 		if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
 			msg_stopping "Network Interface Plugging Daemon ($iface)"
@@ -59,8 +53,9 @@ case "$1" in
 		fi
 	done
 	rm -f /var/run/ifplugd.pid /var/lock/subsys/ifplugd.* >/dev/null 2>&1
-	;;
-  suspend)
+}
+
+suspend() {
   	for iface in $INTERFACES; do
 		if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
 			msg_stopping "Network Interface Plugging Daemon (suspending $iface)"
@@ -70,8 +65,9 @@ case "$1" in
 			msg_not_running "ifplugd ($iface)"
 		fi
 	done
-	;;
-   resume)
+}
+
+resume() {
 	for iface in $INTERFACES; do
 		if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
 			msg_starting "Network Interface Plugging Daemon (resuming $iface)"
@@ -81,20 +77,9 @@ case "$1" in
 			msg_not_running "ifplugd ($iface)"
 		fi
 	done
-	;;
-  restart)
-	$0 stop
-	$0 start
-	exit $?
-	;;
-  status)
-	status /sbin/ifplugd
-  	for iface in $INTERFACES; do
-		/sbin/ifplugd -c -i ${iface}
-	done
-	exit $?
-	;;
-  reload|force-reload)
+}
+
+reload() {
 	if [ -f /var/lock/subsys/ifplugd ]; then
 		$0 stop
 		sleep 2
@@ -104,6 +89,43 @@ case "$1" in
 		msg_not_running ifplugd
 		exit 7
 	fi
+}
+
+[ -n "$2" ] && INTERFACES="$2"
+
+[ -z "$INTERFACES" -o "$INTERFACES" = "auto" ] && INTERFACES=$(awk -F: '/(eth|wlan)/ { print $1 }' /proc/net/dev | xargs)
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  suspend)
+  	suspend
+	;;
+  resume)
+  	resume
+	;;
+  restart)
+	stop
+	start
+	exit $?
+	;;
+  status)
+	status /sbin/ifplugd
+	RETVAL=$?
+  	for iface in $INTERFACES; do
+		/sbin/ifplugd -c -i $iface
+		ret=$?
+		[ $ret -gt 0 ] && RETVAL=$ret
+	done
+	;;
+  reload|force-reload)
+	reload
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
