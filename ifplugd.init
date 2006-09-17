@@ -124,7 +124,7 @@ case "$1" in
 	fi
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|reload|suspend|resume|force-reload|status}"
 	exit 3
 esac
 
