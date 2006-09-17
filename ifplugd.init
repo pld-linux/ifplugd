@@ -97,7 +97,6 @@ case "$1" in
   restart)
 	stop
 	start
-	exit $?
 	;;
   status)
 	status /sbin/ifplugd
