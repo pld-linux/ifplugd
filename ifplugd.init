@@ -55,18 +55,6 @@ stop() {
 	rm -f /var/run/ifplugd.pid /var/lock/subsys/ifplugd.* >/dev/null 2>&1
 }
 
-suspend() {
-  	for iface in $INTERFACES; do
-		if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
-			msg_stopping "Network Interface Plugging Daemon (suspending $iface)"
-			daemon /sbin/ifplugd -S -i ${iface}
-			RETVAL=$?
-		else
-			msg_not_running "ifplugd ($iface)"
-		fi
-	done
-}
-
 resume() {
 	for iface in $INTERFACES; do
 		if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
@@ -77,18 +65,6 @@ resume() {
 			msg_not_running "ifplugd ($iface)"
 		fi
 	done
-}
-
-reload() {
-	if [ -f /var/lock/subsys/ifplugd ]; then
-		$0 stop
-		sleep 2
-		$0 start
-		RETVAL=$?
-	else
-		msg_not_running ifplugd
-		exit 7
-	fi
 }
 
 [ -n "$2" ] && INTERFACES="$2"
@@ -105,7 +81,15 @@ case "$1" in
   	stop
 	;;
   suspend)
-  	suspend
+  	for iface in $INTERFACES; do
+		if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
+			msg_stopping "Network Interface Plugging Daemon (suspending $iface)"
+			daemon /sbin/ifplugd -S -i ${iface}
+			RETVAL=$?
+		else
+			msg_not_running "ifplugd ($iface)"
+		fi
+	done
 	;;
   resume)
   	resume
@@ -125,7 +109,15 @@ case "$1" in
 	done
 	;;
   reload|force-reload)
-	reload
+	if [ -f /var/lock/subsys/ifplugd ]; then
+		stop
+		sleep 2
+		start
+		RETVAL=$?
+	else
+		msg_not_running ifplugd
+		exit 7
+	fi
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
