@@ -101,7 +101,7 @@ case "$1" in
 		$0 start
 		RETVAL=$?
 	else
-		msg_not_running ifplugd >&2
+		msg_not_running ifplugd
 		exit 7
 	fi
 	;;
