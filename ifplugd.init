@@ -28,43 +28,40 @@ fi
 
 start() {
 	# Check if the service is already running?
-	for iface in $INTERFACES; do
-		if [ ! -f /var/lock/subsys/ifplugd.${iface} ]; then
-			msg_starting "Network Interface Plugging Daemon ($iface)"
-			args=$(eval echo \$\{ARGS_${IF}\})
-			[ -z "$args" ] && args="${ARGS}"
-			daemon /sbin/ifplugd -i ${iface} ${args}
-			RETVAL=$?
-			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ifplugd.${iface}
-		else
-			msg_already_running "ifplugd ($iface)"
-		fi
-	done
+	if [ ! -f /var/lock/subsys/ifplugd ]; then
+		for iface in $INTERFACES; do
+			if [ ! -f /var/lock/subsys/ifplugd.${iface} ]; then
+				msg_starting "Network Interface Plugging Daemon ($iface)"
+				args=$(eval echo \$\{ARGS_${IF}\})
+				[ -z "$args" ] && args="${ARGS}"
+				daemon /sbin/ifplugd -i ${iface} ${args}
+				RETVAL=$?
+				[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ifplugd.${iface}
+			else
+				msg_already_running "ifplugd ($iface)"
+			fi
+		done
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ifplugd
+	else
+		msg_already_running "Network Interface Plugging Daemon"
+	fi
 }
 
 stop() {
-  	for iface in $INTERFACES; do
-		if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
-			msg_stopping "Network Interface Plugging Daemon ($iface)"
-			daemon /sbin/ifplugd -k -i ${iface}
-			RETVAL=$?
-		else
-			msg_not_running "ifplugd ($iface)"
-		fi
-	done
-	rm -f /var/run/ifplugd.pid /var/lock/subsys/ifplugd.* >/dev/null 2>&1
-}
-
-resume() {
-	for iface in $INTERFACES; do
-		if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
-			msg_starting "Network Interface Plugging Daemon (resuming $iface)"
-			daemon /sbin/ifplugd -R -i ${iface}
-			RETVAL=$?
-		else
-			msg_not_running "ifplugd ($iface)"
-		fi
-	done
+	if [ -f /var/lock/subsys/ifplugd ]; then
+		for iface in $INTERFACES; do
+			if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
+				msg_stopping "Network Interface Plugging Daemon ($iface)"
+				daemon /sbin/ifplugd -k -i ${iface}
+				RETVAL=$?
+			else
+				msg_not_running "ifplugd ($iface)"
+			fi
+		done
+		rm -f /var/run/ifplugd.pid /var/lock/subsys/ifplugd* >/dev/null 2>&1
+	else
+		msg_not_running "Network Interface Plugging Daemon"
+	fi
 }
 
 [ -n "$2" ] && INTERFACES="$2"
@@ -80,6 +77,10 @@ case "$1" in
   stop)
   	stop
 	;;
+  restart)
+	stop
+	start
+	;;
   suspend)
   	for iface in $INTERFACES; do
 		if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
@@ -92,11 +93,15 @@ case "$1" in
 	done
 	;;
   resume)
-  	resume
-	;;
-  restart)
-	stop
-	start
+	for iface in $INTERFACES; do
+		if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
+			msg_starting "Network Interface Plugging Daemon (resuming $iface)"
+			daemon /sbin/ifplugd -R -i ${iface}
+			RETVAL=$?
+		else
+			msg_not_running "ifplugd ($iface)"
+		fi
+	done
 	;;
   status)
 	status /sbin/ifplugd
