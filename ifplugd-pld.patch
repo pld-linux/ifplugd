@@ -1,0 +1,12 @@
+--- ifplugd-0.28/conf/Makefile.am~	2003-12-11 19:58:43.000000000 +0200
++++ ifplugd-0.28/conf/Makefile.am	2006-09-17 22:19:41.908570041 +0300
+@@ -31,7 +31,7 @@
+ install-data-local: ifplugd.init
+ 	$(INSTALL) -b -D -m755 ifplugd.init ${DESTDIR}${sysinitdir}/ifplugd
+ 	$(INSTALL) -b -D -m755 $(srcdir)/ifplugd.action ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.action
+-	$(INSTALL) -b -D -m644 $(srcdir)/ifplugd.conf ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.conf
++	$(INSTALL) -b -D -m644 $(srcdir)/ifplugd.conf ${DESTDIR}/etc/sysconfig/ifplugd
+ 
+ uninstall-local:
+-	rm -f ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.action ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.conf ${DESTDIR}${sysinitdir}/ifplugd
++	rm -f ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.action ${DESTDIR}/etc/sysconfdir/ifplugd ${DESTDIR}${sysinitdir}/ifplugd
