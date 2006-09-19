@@ -10,3 +10,14 @@
  uninstall-local:
 -	rm -f ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.action ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.conf ${DESTDIR}${sysinitdir}/ifplugd
 +	rm -f ${DESTDIR}${sysconfdir}/ifplugd/ifplugd.action ${DESTDIR}/etc/sysconfdir/ifplugd ${DESTDIR}${sysinitdir}/ifplugd
+--- ifplugd-0.28/man/ifplugd.8~	2005-06-04 22:41:50.000000000 +0300
++++ ifplugd-0.28/man/ifplugd.8	2006-09-19 19:40:05.657462114 +0300
+@@ -90,7 +90,7 @@
+ \fB-z | --info\f1
+ Request that a running daemon shall write its status information to syslog. (Specify -i to select the daemon instance to send the request to.) 
+ .SH FILES
+-\fI/etc/ifplugd/ifplugd.conf\f1: this file is sourced by the init script \fI/etc/init.d/ifplugd\f1 and contains the interface to be monitored and the options to be used.
++\fI/etc/sysconfig/ifplugd\f1: this file is sourced by the init script \fI/etc/rc.d/init.d/ifplugd\f1 and contains the interface to be monitored and the options to be used.
+ 
+ \fI/etc/ifplugd/ifplugd.action\f1: this is the script which will be called by the daemon whenever the state of the interface changes. It takes two areguments: the first is the interface name (eg. eth0), the second either "up" or "down". 
+ 
