@@ -52,7 +52,7 @@ stop() {
 		for iface in $INTERFACES; do
 			if [ -f /var/lock/subsys/ifplugd.${iface} ]; then
 				msg_stopping "Network Interface Plugging Daemon ($iface)"
-				daemon /sbin/ifplugd -k -i ${iface}
+				daemon /sbin/ifplugd -kW -i ${iface}
 				RETVAL=$?
 			else
 				msg_not_running "ifplugd ($iface)"
