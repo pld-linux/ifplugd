@@ -18,6 +18,3 @@ ARGS="-fI -u0 -d10"
 # that $ARGS is ignored, when a variable like this is set for an
 # interface.
 #ARGS_wlan0="-MwI -u5 -d5"
-
-# ifplugd doesn't die immediately when told so. better safe than sorry.
-RPM_SKIP_AUTO_RESTART=yes
