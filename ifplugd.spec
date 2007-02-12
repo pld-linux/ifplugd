@@ -1,5 +1,5 @@
 Summary:	Detect and perform actions when an ethernet cable is (un)plugged
-Summary(pl):	Wykrywanie pod³±czenia/od³±czenia kabla ethernetowego i podejmowanie dzia³añ z tym zwi±zanych
+Summary(pl.UTF-8):   Wykrywanie podÅ‚Ä…czenia/odÅ‚Ä…czenia kabla ethernetowego i podejmowanie dziaÅ‚aÅ„ z tym zwiÄ…zanych
 Name:		ifplugd
 Version:	0.28
 Release:	3
@@ -30,12 +30,12 @@ unconfigure it if the cable is pulled. This is useful on laptops with
 onboard network adapters, since it will only configure the interface
 when a cable is really connected.
 
-%description -l pl
-ifplugd jest demonem linuksowym, który automatycznie konfiguruje kartê
-sieciow± ethernet w chwili pod³±czenia do niej kabla i automatycznie
-usuwa jej konfiguracjê, gdy kabel jest od³±czany. Przydaje siê to w
-laptopach z kart± sieciow± na p³ycie, gdy¿ powoduje to skonfigurowanie
-interfejsu tylko wtedy, gdy kabel jest rzeczywi¶cie pod³±czony.
+%description -l pl.UTF-8
+ifplugd jest demonem linuksowym, ktÃ³ry automatycznie konfiguruje kartÄ™
+sieciowÄ… ethernet w chwili podÅ‚Ä…czenia do niej kabla i automatycznie
+usuwa jej konfiguracjÄ™, gdy kabel jest odÅ‚Ä…czany. Przydaje siÄ™ to w
+laptopach z kartÄ… sieciowÄ… na pÅ‚ycie, gdyÅ¼ powoduje to skonfigurowanie
+interfejsu tylko wtedy, gdy kabel jest rzeczywiÅ›cie podÅ‚Ä…czony.
 
 %prep
 %setup -q
