@@ -1,5 +1,5 @@
 Summary:	Detect and perform actions when an ethernet cable is (un)plugged
-Summary(pl.UTF-8):   Wykrywanie podłączenia/odłączenia kabla ethernetowego i podejmowanie działań z tym związanych
+Summary(pl.UTF-8):	Wykrywanie podłączenia/odłączenia kabla ethernetowego i podejmowanie działań z tym związanych
 Name:		ifplugd
 Version:	0.28
 Release:	3
