@@ -32,7 +32,7 @@ start() {
 		for iface in $INTERFACES; do
 			if [ ! -f /var/lock/subsys/ifplugd.${iface} ]; then
 				msg_starting "Network Interface Plugging Daemon ($iface)"
-				args=$(eval echo \$\{ARGS_${IF}\})
+				args=$(eval echo \$\{ARGS_${iface}\})
 				[ -z "$args" ] && args="${ARGS}"
 				daemon /sbin/ifplugd -i ${iface} ${args}
 				RETVAL=$?
