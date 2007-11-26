@@ -2,12 +2,12 @@ Summary:	Detect and perform actions when an ethernet cable is (un)plugged
 Summary(pl.UTF-8):	Wykrywanie podłączenia/odłączenia kabla ethernetowego i podejmowanie działań z tym związanych
 Name:		ifplugd
 Version:	0.28
-Release:	3
+Release:	4
 License:	GPL
 Group:		Networking
 Source0:	http://0pointer.de/lennart/projects/ifplugd/%{name}-%{version}.tar.gz
 # Source0-md5:	df6f4bab52f46ffd6eb1f5912d4ccee3
-Patch0:	%{name}-pld.patch
+Patch0:		%{name}-pld.patch
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://0pointer.de/lennart/projects/ifplugd/
@@ -17,8 +17,8 @@ BuildRequires:	libdaemon-devel >= 0.5
 BuildRequires:	lynx
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
-Requires(post,preun):	rc-scripts
 Requires(post,preun):	/sbin/chkconfig
+Requires(post,preun):	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
@@ -44,9 +44,9 @@ interfejsu tylko wtedy, gdy kabel jest rzeczywiście podłączony.
 %build
 autoreconf
 %configure \
-    --disable-subversion \
-    --disable-xmltoman \
-    --with-initdir=/etc/rc.d/init.d
+	--disable-subversion \
+	--disable-xmltoman \
+	--with-initdir=/etc/rc.d/init.d
 %{__make}
 
 %install
