@@ -1,3 +1,7 @@
+# TODO
+# - llh fix:
+#/usr/include/sys/types.h:62: error: conflicting types for 'dev_t'
+#/usr/include/linux/types.h:13: error: previous declaration of 'dev_t' was here
 Summary:	Detect and perform actions when an ethernet cable is (un)plugged
 Summary(pl.UTF-8):	Wykrywanie podłączenia/odłączenia kabla ethernetowego i podejmowanie działań z tym związanych
 Name:		ifplugd
