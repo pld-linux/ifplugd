@@ -1,17 +1,14 @@
-# TODO
-# - llh fix:
-#/usr/include/sys/types.h:62: error: conflicting types for 'dev_t'
-#/usr/include/linux/types.h:13: error: previous declaration of 'dev_t' was here
 Summary:	Detect and perform actions when an ethernet cable is (un)plugged
 Summary(pl.UTF-8):	Wykrywanie podłączenia/odłączenia kabla ethernetowego i podejmowanie działań z tym związanych
 Name:		ifplugd
 Version:	0.28
-Release:	5
+Release:	6
 License:	GPL
 Group:		Networking
 Source0:	http://0pointer.de/lennart/projects/ifplugd/%{name}-%{version}.tar.gz
 # Source0-md5:	df6f4bab52f46ffd6eb1f5912d4ccee3
 Patch0:		%{name}-pld.patch
+Patch1:		%{name}-headers_fix.patch
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://0pointer.de/lennart/projects/ifplugd/
@@ -44,6 +41,7 @@ interfejsu tylko wtedy, gdy kabel jest rzeczywiście podłączony.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 autoreconf
